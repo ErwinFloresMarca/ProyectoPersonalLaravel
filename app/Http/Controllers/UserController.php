@@ -16,6 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
+            
         return view("user.index");
     }
     public function listUsers(){
@@ -41,7 +42,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request->ajax()){
+            if($request->password==$request->password_confirm){
+                $user=new User;
+                $user->nombres=$request->nombres;
+                $user->apellidos=$request->apellidos;
+                $user->telefono=$request->telefono;
+                $user->ci=$request->ci;
+                $user->email=$request->email;
+                $user->password=bcrypt($request->password);
+                $user->save();
+                return response()->json(['title'=>'Usuario Creado','msn'=>'El usuario '.$request->nombres.' fue creado exitosamente!!!','success'=>true]);
+            }else{
+                return response()->json(['title'=>'Error en los datos','msn'=>'la contraseña no es la misma que la confirmacion!!!','success'=>false]);    
+            }
+        }
+
     }
 
     /**
@@ -63,7 +79,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user=User::find($id);
+        return response()->json($user->toJson());
     }
 
     /**
@@ -75,7 +92,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if($request->ajax()){
+            $user=User::find($id);
+            $user->nombres=$request->nombres;
+            $user->apellidos=$request->apellidos;
+            $user->telefono=$request->telefono;
+            $user->ci=$request->ci;
+            $user->email=$request->email;
+            if($request->password!=null)
+                $user->password=bcrypt($request->password);
+            $user->save();
+            return response()->json(['title'=>'Usuario Actualizado','msn'=>'El usuario '.$request->nombres.' fue actualizado exitosamente!!!','success'=>true]);
+        }
     }
 
     /**
@@ -86,6 +114,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user=User::find($id);
+        $nombre=$user->nombres;
+        //completar
+        $user->delete();
+        return response()->json(['title'=>'Usuario Eliminado','msn'=>'El usuario '.$nombre.' fue eliminado!!!','success'=>true]);
     }
 }

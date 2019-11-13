@@ -4,15 +4,25 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalTituloUser"></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <table width="100%">
+            <thead>
+              <tr>
+                <td width="90%"><h3 class="modal-title" id="modalTituloUser"></h3></td>
+                <td width="10%">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </td>
+              </tr>
+            </thead>
+          </table>
+        
+          
         </div>
         <div class="modal-body">
           <form id="userFormModal" action="">
           @csrf
-
+          <input id="UFurl" type="hidden" name="UFurl" value="{{url("user")}}">
           <div class="form-group row">
               <label for="nombres" class="col-md-4 col-form-label text-md-right">{{ __('Nombres') }}</label>
 
@@ -78,19 +88,83 @@
     </div>
   </div>
   <script type="text/javascript">
+    var sendRequestOnSubmit=(url,data,token,method)=>{
+            $.ajax({
+              'url': url,
+              headers: {'X-CSRF-TOKEN':token},
+              type: method,
+              dataType:'json',
+              'data':data,
+              success:function(docs){
+                //docs=JSON.parse(docs);
+                if(docs.success){
+                  toastr.success(docs.msn,docs.title);
+                  $('#formUser').modal('hide');
+                }
+                else{
+                  toastr.error(docs.msn,docs.title);
+                }
+              }.bind(this)
+            });
+          };;
+    var UFurl;
+    var UFdata;
+    var UFtoken=$('input[name ="_token"]').val();
+    var UFmethod;
+    function getAllDataforUserForm(){
+      return {
+          nombres: $("#nombres").val(),
+          apellidos:$("#apellidos").val(),
+          telefono: $("#telefono").val(),
+          ci:$("#ci").val(),
+          email:$("#email").val(),
+          password: $("#password").val(),
+          password_confirm: $("#password-confirm").val()
+      };
+    } 
+    function LoadDataInForm(id){
+        var route=$('#UFurl').val()+'/'+id+"/edit";
+        
+        var onSucces=function(docs){
+            var docs=JSON.parse(docs);
+            $("#nombres").val(docs.nombres);
+            $("#apellidos").val(docs.apellidos);
+            $("#telefono").val(docs.telefono);
+            $("#ci").val(docs.ci);
+            $("#email").val(docs.email);  
+        };
+        onSucces.bind(this);
+        $.ajax({
+            url: route,
+            headers: {'X-CSRF-TOKEN':UFtoken},
+            type: 'GET',
+            dataType:'json',
+            success:function(docs){
+              onSucces(docs);
+            }
+        });
+    }
     function openModalFormUser(idUser){
-        console.log(idUser);
+        document.getElementById('userFormModal').reset();
         if(idUser){
-            $('#modalTituloUser').append("Editar Usuario");
-            $('#btnSubmitFormUser').append("Guardar Cambios");
-
+        
+          $('#modalTituloUser').html("Editar Usuario");
+          $('#btnSubmitFormUser').html("Guardar Cambios");
+          LoadDataInForm(idUser);
+          $('#password-confirm').hide(); 
+          UFurl=$('#UFurl').val()+'/'+idUser;
+          UFmethod='PUT';
         }else{
-            $('#modalTituloUser').append("Nuevo Usuario");
-            $('#btnSubmitFormUser').append("Registrar");
+          $('#modalTituloUser').html("Nuevo Usuario");
+          $('#btnSubmitFormUser').html("Registrar");
+          $('#password-confirm').show();
+          UFurl=$('#UFurl').val();
+          UFmethod='POST';
         }
     }
     function onSubmitModalFormUser(){
-        console.log("click on submit");
+        UFdata=getAllDataforUserForm();
+        sendRequestOnSubmit(UFurl,UFdata,UFtoken,UFmethod);
         if(reloadDataTable)
             reloadDataTable();  
     }
