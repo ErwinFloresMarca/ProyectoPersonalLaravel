@@ -30,7 +30,8 @@
 
     <!-- Toastr -->
     <link rel="stylesheet" href="{{asset("plugins/toastr/toastr.min.css")}}">
-
+     <!-- Toggle booton -->
+    <link rel="stylesheet" href="{{asset("plugins/toggleButton/bootstrap-toggle.min.css" )}}">
 
 
     <!-- Google Font -->

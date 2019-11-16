@@ -71,7 +71,7 @@
               </div>
           </div>
 
-          <div class="form-group row">
+          <div class="form-group row" id="groupPasswordConfirm">
               <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
 
               <div class="col-md-6">
@@ -151,13 +151,13 @@
           $('#modalTituloUser').html("Editar Usuario");
           $('#btnSubmitFormUser').html("Guardar Cambios");
           LoadDataInForm(idUser);
-          $('#password-confirm').hide(); 
+          $('#groupPasswordConfirm').hide(); 
           UFurl=$('#UFurl').val()+'/'+idUser;
           UFmethod='PUT';
         }else{
           $('#modalTituloUser').html("Nuevo Usuario");
           $('#btnSubmitFormUser').html("Registrar");
-          $('#password-confirm').show();
+          $('#groupPasswordConfirm').show();
           UFurl=$('#UFurl').val();
           UFmethod='POST';
         }

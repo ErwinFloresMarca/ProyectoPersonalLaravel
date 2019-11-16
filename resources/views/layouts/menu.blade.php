@@ -24,6 +24,11 @@
                 <i class="fa fa-th"></i> <span>Usuario</span>
               </a>
             </li>
+            <li>
+              <a href="{{route("archivo.index")}}">
+                <i class="fa fa-th"></i> <span>Archivos</span>
+              </a>
+            </li>
           </ul>
         </section>
         <!-- /.sidebar -->

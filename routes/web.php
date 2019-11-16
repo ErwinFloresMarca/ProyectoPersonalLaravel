@@ -15,7 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/user/listUsers','UserController@listUsers')->name('user.listUsers');
+Route::get('/archivo/listArchivos','ArchivoController@listArchivos')->name('archivo.listArchivos');
 Route::resource('user', 'UserController');
+Route::resource('archivo', 'ArchivoController');
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

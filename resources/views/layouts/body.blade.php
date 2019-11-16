@@ -51,5 +51,8 @@
 <script src="{{asset("bootstrapTemplates/bower_components/jquery-slimscroll/jquery.slimscroll.min.js")}}"></script>
 <!-- ChartJS -->
 <script src="{{asset("bootstrapTemplates/bower_components/chart.js/Chart.js")}}"></script>
-
+<!-- CK editor -->
+<script src="{{asset("bootstrapTemplates/bower_components/ckeditor/ckeditor.js")}}"></script>
+<!-- Toggle booton -->
+<script src="{{asset("plugins/toggleButton/bootstrap-toggle.min.js")}}"></script>
 </body>

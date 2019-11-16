@@ -1,23 +1,19 @@
 @extends('layouts.appTemp')
 
 @section('contenido')
-    @include('user.modalFormUser')
+    @include('archivo.modalNuevoArchivo')
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formUser" onclick="openModalFormUser()">
-        Nuevo
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#MNA" onclick="openModalFormArchivo()">
+        Subir Archivo
     </button>
-    <br>
-    
-    <table id='tablaUsuarios' class="table">
+    <table id='tablaArchivos' class="table">
             <thead>
             <tr>
               <th>No.ID</th>
-              <th>Nombres</th>
-              <th>Apellidos</th>
-              <th>CI</th>
-              <th>Email</th>
-              <th>Telefono</th>
-              <th>Opciones</th>
+              <th>Nombre</th>
+              <th>Privacidad</th>
+              <th>Propiedades</th>
+              
             </tr>
             </thead>
             <tbody>
@@ -26,36 +22,33 @@
     </table>
 @endsection
 @section('titulo')
-    Usuarios
+    Archivos
 @endsection
 
 @section('js')
 <script type="text/javascript">
     toastr.options = {"closeButton":false,"debug":false,"newestOnTop":false,"progressBar":false,"positionClass":"toast-top-right","preventDuplicates":false,"onclick":null,"showDuration":"300","hideDuration":"1000","timeOut":"5000","extendedTimeOut":"1000","showEasing":"swing","hideEasing":"linear","showMethod":"fadeIn","hideMethod":"fadeOut"," positionClass ":" toast-top-right "};
                 
-       var tablaUsuarios = $('#tablaUsuarios').DataTable({
+       var tablaArchivos = $('#tablaArchivos').DataTable({
             "lengthMenu":[5,10,15,20],
-            "ajax":"{{route('user.listUsers')}}",
+            "ajax":"{{route('archivo.listArchivos')}}",
             columns:[
                 {data: 'id'},
-                {data: 'nombres'},
-                {data: 'apellidos'},
-                {data: 'ci'},
-                {data: 'email'},
-                {data: 'telefono'},
+                {data: 'nombre'},
+                {data: 'privacidad'},
                 {
                     "render": function(data,type,row){
                         
-                        var html='<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#formUser"  onclick="openModalFormUser('+row.id+')"><i class="fa fa-fw fa-edit"></i></button> ';
-                        //por completar
-                        html=html+'<button type="button" class="btn btn-xs btn-danger"  onclick="onBtnDeletUser('+row.id+')"><i class="fa fa-fw fa-close"></i></button>';
+                        var html='<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#formUser"  onclick="openModalFormArchivo('+row.id+')"><i class="fa fa-fw fa-edit"></i></button> ';
+                        
+                        html=html+'<button type="button" class="btn btn-xs btn-danger"  onclick="onBtnDeletArchivo('+row.id+')"><i class="fa fa-fw fa-close"></i></button>';
                         return html;
                     }
                 }
 
             ]
         });
-    function onBtnDeletUser(id){
+    function onBtnDeletArchivo(id){
         $.ajax({
             url: '{{url("user")}}'+'/'+id,
             headers: {'X-CSRF-TOKEN':'{{ csrf_token() }}'},
@@ -68,7 +61,8 @@
         reloadDataTable();
     }
     function reloadDataTable(){
-        tablaUsuarios.ajax.reload();
+        tablaArchivos.ajax.reload();
     }
+    
 </script>    
 @endsection
