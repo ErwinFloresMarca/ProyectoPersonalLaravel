@@ -1,4 +1,4 @@
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
 <!-- toastr js-->
 <script src="{{asset("plugins/toastr/jquery.min.js")}}"></script>
 <script src="{{asset("plugins/toastr/toastr.min.js")}}"></script>
@@ -10,8 +10,9 @@
 
     <div class="wrapper">
         @include('layouts.nav')
-
-        @include('layouts.menu')
+        @auth
+        @include('layouts.menu')    
+        @endauth
         <div class="content-wrapper">
              <!-- Content Header (Page header) -->
             <section class="content-header">
@@ -33,7 +34,18 @@
 
 
     </div>
-    @yield('js')
+@if (isset($tipoEditor))
+    @if ($tipoEditor=='word')
+       <!-- CK editor -->
+        <script src="{{asset("bootstrapTemplates/bower_components/ckeditor/ckeditor.js")}}"></script> 
+    @endif
+    @if ($tipoEditor=='codemirror')
+        <!-- CK editor -->
+        <script src="{{asset("plugins/codemirror/lib/codemirror.js")}}"></script>
+        @include('archivo.addLibCodeMirrorMode') 
+    @endif
+@endif
+    @yield('js')  
 <!-- jQuery 3 -->
 <script src="{{asset("bootstrapTemplates/bower_components/jquery/dist/jquery.min.js")}}"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -51,8 +63,9 @@
 <script src="{{asset("bootstrapTemplates/bower_components/jquery-slimscroll/jquery.slimscroll.min.js")}}"></script>
 <!-- ChartJS -->
 <script src="{{asset("bootstrapTemplates/bower_components/chart.js/Chart.js")}}"></script>
-<!-- CK editor -->
-<script src="{{asset("bootstrapTemplates/bower_components/ckeditor/ckeditor.js")}}"></script>
+
 <!-- Toggle booton -->
 <script src="{{asset("plugins/toggleButton/bootstrap-toggle.min.js")}}"></script>
+
+
 </body>

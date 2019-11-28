@@ -1,6 +1,7 @@
 @extends('layouts.appTemp')
 
 @section('contenido')
+<!--
 @if (Route::has('login'))
 <div class="top-right links">
     @auth
@@ -13,7 +14,11 @@
         @endif
     @endauth
 </div>
+-->
+@include('archivo.listArchivos')
 @endif
+
+
 @endsection
 @section('titulo')
     Welcome

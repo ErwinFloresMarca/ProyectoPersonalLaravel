@@ -18,15 +18,17 @@
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
+            @if (explode("@",Auth::user()->email)[1]=="admin.com")
+            <li>
+                <a href="{{route("user.index")}}">
+                  <i class="fa fa-th"></i> <span>Usuario</span>
+                </a>
+            </li>    
+            @endif
             
             <li>
-              <a href="{{route("user.index")}}">
-                <i class="fa fa-th"></i> <span>Usuario</span>
-              </a>
-            </li>
-            <li>
               <a href="{{route("archivo.index")}}">
-                <i class="fa fa-th"></i> <span>Archivos</span>
+                <i class="fa fa-th"></i> <span>Mis Archivos</span>
               </a>
             </li>
           </ul>

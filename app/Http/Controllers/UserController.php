@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Http\Requests\userRequest;
+use App\Http\Requests\userUpdateRequest;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -40,10 +42,10 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(userRequest $request)
     {
+        
         if($request->ajax()){
-            if($request->password==$request->password_confirm){
                 $user=new User;
                 $user->nombres=$request->nombres;
                 $user->apellidos=$request->apellidos;
@@ -53,9 +55,7 @@ class UserController extends Controller
                 $user->password=bcrypt($request->password);
                 $user->save();
                 return response()->json(['title'=>'Usuario Creado','msn'=>'El usuario '.$request->nombres.' fue creado exitosamente!!!','success'=>true]);
-            }else{
-                return response()->json(['title'=>'Error en los datos','msn'=>'la contraseña no es la misma que la confirmacion!!!','success'=>false]);    
-            }
+            
         }
 
     }
@@ -90,7 +90,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(userUpdateRequest $request, $id)
     {
         if($request->ajax()){
             $user=User::find($id);

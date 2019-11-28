@@ -14,9 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('archivo/guardarCambios/{id}','ArchivoController@guardarCambios');
 Route::get('/user/listUsers','UserController@listUsers')->name('user.listUsers');
-Route::get('/archivo/listArchivos','ArchivoController@listArchivos')->name('archivo.listArchivos');
+Route::get('/archivo/{id}/listArchivos/{get}','ArchivoController@listArchivos')->name('archivo.listArchivos');
 Route::resource('user', 'UserController');
+Route::resource('permisos', 'PermisosController');
 Route::resource('archivo', 'ArchivoController');
 
 Auth::routes();

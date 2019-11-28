@@ -33,7 +33,17 @@
      <!-- Toggle booton -->
     <link rel="stylesheet" href="{{asset("plugins/toggleButton/bootstrap-toggle.min.css" )}}">
 
+    <!--pretty checkbox-->
+    <link rel="stylesheet" href="{{asset("plugins/pretty-checkbox/pretty-checkbox.min.css" )}}">
 
+     @if (isset($tipoEditor))
+          @if ($tipoEditor=='codemirror')
+               <!-- CK editor -->
+               <link rel="stylesheet" href="{{asset("plugins/codemirror/lib/codemirror.css")}}">                 
+          @endif
+     @endif
+
+    <link rel="stylesheet" href="{{asset("plugins/pretty-checkbox/pretty-checkbox.min.css" )}}">
     <!-- Google Font -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">

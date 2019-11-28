@@ -10,6 +10,14 @@ class Permisos extends Model
     protected $table = 'permisos';
 
     public function archivo(){
-        return $this.BelongsTo(Archivo::class);
+        return $this->belongsTo(Archivo::class);
+    }
+
+    public static function savePermisos($archivo_id,$ver,$editar){
+        $permiso=new Permisos();
+        $permiso->archivo_id=$archivo_id;
+        $permiso->ver=$ver;
+        $permiso->editar=$editar;
+        $permiso->save();
     }
 }
