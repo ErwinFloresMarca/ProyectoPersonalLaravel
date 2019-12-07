@@ -80,6 +80,7 @@
               success:function(docs){
                 //docs=JSON.parse(docs);
                 if(docs.success){
+                  reloadDataTable();
                   toastr.success(docs.msn,docs.title);
                   $('#MNA').modal('hide');
                 }

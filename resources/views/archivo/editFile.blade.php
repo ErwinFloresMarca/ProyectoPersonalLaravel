@@ -12,10 +12,16 @@
 {{$contenido}}
     </textarea>
     </div>
-    <div class="text-center">
-    <button id='btnEdit' class="btn btn-danger" onclick="cambiarEditable(Editable)">Editar</button>
-    <button id='btnGuardar' class="btn btn-primary" onclick="guardarCambios()">Guardar</button>    
-    </div>
+    @if ($archivo->privacidad==1)
+    @if ($archivo->permisos->editar==1)
+        <div class="text-center">
+        <button id='btnEdit' class="btn btn-danger" onclick="cambiarEditable(Editable)">Editar</button>
+        <button id='btnGuardar' class="btn btn-primary" onclick="guardarCambios()">Guardar</button>    
+        </div>
+    @endif
+            
+    @endif
+    
 
     @else
     <h3 class="text-center">{{$archivo->nombre}}</h3>
@@ -34,14 +40,16 @@
             </a>
             <br>
             <br>
-            @if ($tipoEditor=='office')
+            @if ($tipoEditor=='office'&&$archivo->privacidad==1)
+            @if ($archivo->permisos->editar==1)
                 <div class="alert alert-warning">
                     Este tipo de archivo no puede editarse directamente <br>
                     Puede editarlo de forma indirecta y subir el archivo editado si prefiere.
                 </div>
                 <input type="file" id="archivoActualizado">
                 <button class="btn btn-primary" onclick="guardarCambios()">Guardar</button>
-                
+            
+            @endif
             @endif
         </div>
     </div>
@@ -56,7 +64,8 @@
 @section('js')
 <script>
     toastr.options = {"closeButton":false,"debug":false,"newestOnTop":false,"progressBar":false,"positionClass":"toast-top-right","preventDuplicates":false,"onclick":null,"showDuration":"300","hideDuration":"1000","timeOut":"5000","extendedTimeOut":"1000","showEasing":"swing","hideEasing":"linear","showMethod":"fadeIn","hideMethod":"fadeOut"," positionClass ":" toast-top-right "};        
-    
+@if($archivo->permisos)
+@if($archivo->permisos->editar==1)
     function enviarCambios(addData){
             $.ajax({
               url: '{{url('archivo/guardarCambios').'/'.$archivo->id}}',
@@ -137,7 +146,8 @@
 
     @endauth
     }
-
+@endif
+@endif
     //fin guardar cambios
     
     @if($tipoEditor=='codemirror')

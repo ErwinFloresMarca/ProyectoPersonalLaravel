@@ -5,7 +5,7 @@
  */
 package exppconcurrentes;
 /**
- * prueba modificar archivo en liena
+ *
  * @author erwin
  */
 public class ExPPConcurrentes {

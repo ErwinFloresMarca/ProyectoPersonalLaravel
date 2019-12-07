@@ -7,11 +7,9 @@ use App\User;
 use App\Qr;
 use App\Permisos;
 use Illuminate\Http\Request;
-use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
-use DateTime;
-use Docx_reader\Docx_reader;
-use Illuminate\Support\Facades\DB;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Illuminate\Support\Facades\File;
 use Yajra\DataTables\DataTables;
 class ArchivoController extends Controller
@@ -30,10 +28,12 @@ class ArchivoController extends Controller
     public function listArchivos($id,$data){
         //$data=[$id,$data];
         //dd($data);
+        $archivos=[];
         if($id==0){
             //publicos index
             $result=Archivo::all()->where('user_id','!=',$id);
             foreach($result as $res)
+            if($res->privacidad==1)
                 if($res->permisos->ver)
                     $archivos[]=$res;   
         }
@@ -41,6 +41,7 @@ class ArchivoController extends Controller
                 //otros home
                 $result=Archivo::all()->where('user_id','!=',$id);
                 foreach($result as $res)
+                if($res->privacidad==1)
                     if($res->permisos->ver)
                         $archivos[]=$res;
             }else{
@@ -67,7 +68,21 @@ class ArchivoController extends Controller
     {
         //
     }
-
+    public function createQr($archivo_id){
+        $opt = new QROptions([
+            'version'    => 5,
+            'outputType' => QRCode::OUTPUT_MARKUP_SVG,
+            'eccLevel'   => QRCode::ECC_L,
+        ]);
+        $qrcode= new QRCode($opt);
+        $data=url('archivo').'/'.$archivo_id;
+        $pathFile="/qrs/qr-To-".$archivo_id.".svg";
+        $qrcode->render($data,public_path().$pathFile);
+        $qr=new Qr();
+        $qr->archivo_id=$archivo_id;
+        $qr->ruta=$pathFile;
+        $qr->save();
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -76,7 +91,7 @@ class ArchivoController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
+        
         $extenciones=["txt",'cpp','docx','java'];    
         if($request->ajax()){
             
@@ -102,7 +117,8 @@ class ArchivoController extends Controller
                     $arch->save();
                     if($request->privacidad){
                         Permisos::savePermisos($arch->id,$request->ver,$request->editar);
-                        Qr::createQr($arch->id);
+                        $this->createQr($arch->id);
+                        
                     }
                     return response()->json([
                         'title'=>'Archivo Subido',
@@ -138,7 +154,7 @@ class ArchivoController extends Controller
      */
     public function show(Archivo $archivo)
     {
-        $extenciones=["txt",'cpp','docx','java'];
+        $extenciones=["txt",'cpp','docx','java',"xlsx","pptx","xmlx"];
         $contenido="";
         $tipoEditor="";
         $cmConfMode="";
